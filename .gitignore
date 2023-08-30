@@ -1,0 +1,3 @@
+/**/src/target/debug/**/*
+/**/src/target/.rust_info.json
+/**/src/target/CACHEDIR.TAG
