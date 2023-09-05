@@ -8,6 +8,11 @@ fn main() {
     string_remove();
     string_truncate();
     string_clear();
+    string_add();
+    string_format();
+    string_loop_chars();
+    string_loop_bytes();
+    string_escaping();
 }
 
 fn string_push() {
@@ -76,4 +81,44 @@ fn string_clear() {
     let mut string_clear = String::from("string clear");
     string_clear.clear();
     dbg!(string_clear);
+}
+
+fn string_add() {
+    let string_append = String::from("hello ");
+    let string_rust = String::from("rust");
+    let result = string_append + &string_rust;
+    let mut result = result + "!";
+    result += "!!!";
+    println!("string add + -> {}", result);
+}
+
+fn string_format() {
+    let s1 = "hello";
+    let s2 = String::from("rust");
+    let s = format!("{} {}", s1, s2);
+    println!("{}", s);
+}
+
+fn string_loop_chars() {
+    for c in "japanese".chars() {
+        println!("{}", c);
+    }
+}
+
+fn string_loop_bytes() {
+    for b in "japanese".bytes() {
+        println!("{}", b);
+    }
+}
+
+fn string_escaping() {
+    let byte_escape = "I'm writing \x52\x75\x73\x74!";
+    println!("WHat are you doing\x3F (\\x3F means ?) {}", byte_escape);
+
+    let unicode_codepoint = "\u{211D}";
+    let character_name = "\"DOUBLE_STRUCK CAPITAL R\"";
+    println!(
+        "Unicode character {} (U+211D) is called {}",
+        unicode_codepoint, character_name
+    );
 }
