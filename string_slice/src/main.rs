@@ -121,4 +121,10 @@ fn string_escaping() {
         "Unicode character {} (U+211D) is called {}",
         unicode_codepoint, character_name
     );
+
+    let long_string = "String literals
+can span multiple lines.
+The linebreak and indentation here ->\
+                        <- can be escaped too!";
+    println!("{}", long_string);
 }
