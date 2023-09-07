@@ -13,6 +13,8 @@ fn main() {
     string_loop_chars();
     string_loop_bytes();
     string_escaping();
+    r_str();
+    string_new();
 }
 
 fn string_push() {
@@ -127,4 +129,20 @@ can span multiple lines.
 The linebreak and indentation here ->\
                         <- can be escaped too!";
     println!("{}", long_string);
+}
+
+fn r_str() {
+    let s: Box<str> = "hello, world".into();
+    greetings(&s)
+}
+
+fn greetings(s: &str) {
+    println!("{}", s);
+}
+
+fn string_new() {
+    let mut s = String::new();
+    s.push_str("hello, world");
+    s.push('!');
+    assert_eq!(s, "hello, world!");
 }
