@@ -15,6 +15,14 @@ fn main() {
     string_escaping();
     r_str();
     string_new();
+    byte_string();
+    raw_bytestring();
+    bytestring_to_str();
+    bytestring_shift_jis();
+    from_utf8();
+    slice_i32();
+    string_loop_enumerate();
+    string_struct();
 }
 
 fn string_push() {
@@ -60,6 +68,7 @@ fn string_pop() {
     dbg!(p1);
     dbg!(p2);
     dbg!(string_pop);
+    slice_mem();
 }
 
 fn string_remove() {
@@ -107,6 +116,15 @@ fn string_loop_chars() {
     }
 }
 
+fn string_loop_enumerate() {
+    let s = String::from("hello, world");
+    for (i, c) in s.chars().enumerate() {
+        if i == 7 {
+            assert_eq!(c, 'w')
+        }
+    }
+}
+
 fn string_loop_bytes() {
     for b in "japanese".bytes() {
         println!("{}", b);
@@ -145,4 +163,63 @@ fn string_new() {
     s.push_str("hello, world");
     s.push('!');
     assert_eq!(s, "hello, world!");
+}
+
+use std::str;
+
+fn byte_string() {
+    let bytestring: &[u8; 21] = b"this is a byte string";
+    println!("A byte string: {:?}", bytestring);
+}
+
+fn raw_bytestring() {
+    let raw_bytestring = br"\u{211D} is not escaped here";
+    println!("{:?}", raw_bytestring);
+}
+
+fn bytestring_to_str() {
+    let raw_bytestring = br"\u{211D} is not escaped here";
+    if let Ok(my_str) = str::from_utf8(raw_bytestring) {
+        println!("And the same as text: '{}'", my_str);
+    }
+}
+
+fn bytestring_shift_jis() {
+    let shift_jis = b"\x82\xe6\x82\xa8\x82\xb1\x82\xbb";
+    match str::from_utf8(shift_jis) {
+        Ok(my_str) => println!("Conversion successful: '{}'", my_str),
+        Err(e) => println!("Conversion failed: {:?}", e),
+    };
+}
+
+fn from_utf8() {
+    let s = String::from("hello");
+    let v = vec![104, 101, 108, 108, 111];
+    let s1 = String::from_utf8(v).unwrap();
+    assert_eq!(s, s1);
+}
+
+fn slice_mem() {
+    let arr: [char; 3] = ['a', 'b', 'c'];
+    let slice = &arr[..2];
+    assert!(std::mem::size_of_val(slice) == 8);
+}
+
+fn slice_i32() {
+    let arr: [i32; 5] = [1, 2, 3, 4, 5];
+    let slice: &[i32] = &arr[1..4];
+    assert_eq!(slice, &[2, 3, 4]);
+}
+
+use std::mem;
+
+fn string_struct() {
+    let story = String::from("Rust By Practice");
+    let mut story = mem::ManuallyDrop::new(story);
+    let ptr = story.as_mut_ptr();
+    let len = story.len();
+    let capacity = story.capacity();
+
+    let s = unsafe { String::from_raw_parts(ptr, len, capacity) };
+    assert_eq!(*story, s);
 }
